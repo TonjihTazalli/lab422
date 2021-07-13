@@ -1,0 +1,91 @@
+import numpy as np
+import random
+
+class Node:
+  def __init__(self):
+    self.successor=[]
+    self.heuristics=None
+    # self.maxEval=-np.inf
+    # self.minEval=np.inf
+
+def gameTreeGeneration(node,d):
+  if d==0:
+    node.heuristics= random.randint(minHeuristics, maxHeuristics)
+    return
+  for i in range(branch):
+    node.successor.append(Node())    
+    temp=node.successor[i]
+    gameTreeGeneration(temp,d-1)
+  return
+
+def miniMax(node,h,maxPlayer):
+  global comparisonBeforeAlphaBeta
+  comparisonBeforeAlphaBeta+=1
+  if h==0:
+    return node.heuristics
+  
+  if maxPlayer:
+    maxEval=-np.inf
+    for x in node.successor:
+      y=miniMax(x,h-1,False)
+      maxEval=max(maxEval,y)
+    return maxEval
+  else:
+    minEval=np.inf
+    for x in node.successor:
+      y=miniMax(x,h-1,True)
+      minEval=min(minEval,y)
+    return minEval
+
+def alphaBeta(node,h,maxPlayer,alpha,beta):
+  global comparisonAfterAlphaBeta
+  comparisonAfterAlphaBeta+=1
+  if h==0:
+    return node.heuristics
+  
+  if maxPlayer:
+    maxEval=-np.inf
+    for x in node.successor:
+      y=alphaBeta(x,h-1,False,alpha,beta)
+      maxEval=max(maxEval,y)
+      alpha=max(alpha,y)
+      if alpha>=beta:
+        break
+    return maxEval
+  else:
+    minEval=np.inf
+    for x in node.successor:
+      y=alphaBeta(x,h-1,True,alpha,beta)
+      minEval=min(minEval,y)
+      beta=min(beta,y)
+      if alpha>=beta:
+        break
+    return minEval
+
+
+
+
+if __name__ == "__main__":
+  depth=int(input('Enter depth of tree :'))
+  branch=int(input('Enter number of branch for each node :'))
+  maxHeuristics=int(input('Enter maximum heuristics value for leaf nodes :'))
+  minHeuristics=int(input('Enter minimum heuristics value for leaf nodes :'))
+
+  root=Node() 
+  gameTreeGeneration(root,depth)
+
+  comparisonBeforeAlphaBeta=0
+  MaximumAmount= miniMax(root, depth,True)
+  print(MaximumAmount)
+  print("comparisonBeforeAlphaBeta :",comparisonBeforeAlphaBeta)
+
+
+  alpha=-np.inf
+  beta=np.inf
+  comparisonAfterAlphaBeta=0
+  maximumAmount=alphaBeta(root, depth,True,alpha,beta)
+  print("comparisonAfterAlphaBeta :",comparisonAfterAlphaBeta)
+
+
+
+
